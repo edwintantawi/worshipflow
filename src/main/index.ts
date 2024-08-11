@@ -1,37 +1,17 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron';
-import { join } from 'path';
-import { electronApp, optimizer, is } from '@electron-toolkit/utils';
-import icon from '../../resources/icon.png?asset';
+import { app, BrowserWindow, ipcMain, screen } from 'electron';
+import { electronApp, optimizer } from '@electron-toolkit/utils';
+import { createConsoleWindow, createProjectorWindow } from '@main/window';
+import { getExternalDisplay } from '@main/utilities';
 
 function createWindow(): void {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
-    show: false,
-    autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
-    webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
-      sandbox: false,
-    },
-  });
+  const externalDisplay = getExternalDisplay();
 
-  mainWindow.on('ready-to-show', () => {
-    mainWindow.show();
-  });
+  // Create the main console window
+  createConsoleWindow();
 
-  mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url);
-    return { action: 'deny' };
-  });
-
-  // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL']);
-  } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'));
+  // Create the projector window if an external display
+  if (externalDisplay) {
+    createProjectorWindow({ display: externalDisplay });
   }
 }
 
@@ -40,7 +20,7 @@ function createWindow(): void {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId('com.electron');
+  electronApp.setAppUserModelId('com.worshipflow');
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
@@ -59,6 +39,10 @@ app.whenReady().then(() => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
+
+  screen.on('display-added', (_, display) => {
+    createProjectorWindow({ display });
+  });
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -69,6 +53,3 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
-
-// In this file you can include the rest of your app"s specific main process
-// code. You can also put them in separate files and require them here.
