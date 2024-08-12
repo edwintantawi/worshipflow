@@ -42,6 +42,8 @@ export function createProjectorWindow({ display }: { display: Electron.Display }
   const window = new BrowserWindow({
     frame: false,
     fullscreen: true,
+    alwaysOnTop: true,
+    focusable: false,
     x: display.bounds.x + 50,
     y: display.bounds.y + 50,
     webPreferences: {

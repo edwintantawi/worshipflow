@@ -3,6 +3,9 @@ import { electronApp, optimizer } from '@electron-toolkit/utils';
 import { createConsoleWindow, createProjectorWindow } from '@main/window';
 import { getExternalDisplay } from '@main/utilities';
 
+// Keep single instance of projector window
+let projectorWindow: BrowserWindow | undefined;
+
 function createWindow(): void {
   const externalDisplay = getExternalDisplay();
 
@@ -10,8 +13,8 @@ function createWindow(): void {
   createConsoleWindow();
 
   // Create the projector window if an external display
-  if (externalDisplay) {
-    createProjectorWindow({ display: externalDisplay });
+  if (externalDisplay && !projectorWindow) {
+    projectorWindow = createProjectorWindow({ display: externalDisplay });
   }
 }
 
@@ -41,7 +44,9 @@ app.whenReady().then(() => {
   });
 
   screen.on('display-added', (_, display) => {
-    createProjectorWindow({ display });
+    if (!projectorWindow) {
+      projectorWindow = createProjectorWindow({ display });
+    }
   });
 });
 
