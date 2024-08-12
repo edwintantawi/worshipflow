@@ -5,13 +5,17 @@ import { is } from '@electron-toolkit/utils';
 
 const ELECTRON_RENDERER_URL = process.env['ELECTRON_RENDERER_URL'];
 
+const ROOT_PATH = path.join(__dirname, '../');
+const RENDERER_PATH = path.join(ROOT_PATH, '/renderer');
+const PRELOAD_PATH = path.join(ROOT_PATH, '/preload');
+
 export function createConsoleWindow(): BrowserWindow {
   const window = new BrowserWindow({
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
-      preload: path.join(__dirname, '../preload/console.js'),
+      preload: path.join(PRELOAD_PATH, '/console.js'),
       sandbox: false,
     },
   });
@@ -28,7 +32,7 @@ export function createConsoleWindow(): BrowserWindow {
   if (is.dev && ELECTRON_RENDERER_URL) {
     window.loadURL(`${ELECTRON_RENDERER_URL}/console/renderer/index.html`);
   } else {
-    window.loadFile(path.join(__dirname, '../console/renderer/index.html'));
+    window.loadFile(path.join(RENDERER_PATH, '/console/renderer/index.html'));
   }
 
   return window;
@@ -41,7 +45,7 @@ export function createProjectorWindow({ display }: { display: Electron.Display }
     x: display.bounds.x + 50,
     y: display.bounds.y + 50,
     webPreferences: {
-      preload: path.join(__dirname, '../preload/projector.js'),
+      preload: path.join(PRELOAD_PATH, '/projector.js'),
       sandbox: false,
     },
   });
@@ -50,7 +54,7 @@ export function createProjectorWindow({ display }: { display: Electron.Display }
   if (is.dev && ELECTRON_RENDERER_URL) {
     window.loadURL(`${ELECTRON_RENDERER_URL}/projector/renderer/index.html`);
   } else {
-    window.loadFile(path.join(__dirname, '../projector/renderer/index.html'));
+    window.loadFile(path.join(RENDERER_PATH, '/projector/renderer/index.html'));
   }
 
   return window;
