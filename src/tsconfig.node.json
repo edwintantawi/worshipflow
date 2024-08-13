@@ -1,0 +1,13 @@
+{
+  "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
+  "include": ["main/**/*.ts", "console/preload/**/*.ts", "projector/preload/**/*.ts"],
+  "compilerOptions": {
+    "composite": true,
+    "types": ["electron-vite/node"],
+    "baseUrl": ".",
+    "paths": {
+      "@main/*": ["main/*"],
+      "@resources/*": ["../resources/*"]
+    }
+  }
+}

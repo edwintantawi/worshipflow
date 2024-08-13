@@ -1,5 +1,6 @@
 {
   "name": "worshipflow",
+  "productName": "Worshipflow",
   "version": "1.0.0",
   "description": "Worship presenter application",
   "main": "./out/main/index.js",
@@ -7,9 +8,10 @@
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
-    "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
-    "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
-    "typecheck": "npm run typecheck:node && npm run typecheck:web",
+    "typecheck:node": "tsc --noEmit -p src/tsconfig.node.json --composite false",
+    "typecheck:console": "tsc --noEmit -p src/console/tsconfig.web.json --composite false",
+    "typecheck:projector": "tsc --noEmit -p src/projector/tsconfig.web.json --composite false",
+    "typecheck": "npm run typecheck:node && npm run typecheck:console && npm run typecheck:projector",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
     "build": "npm run typecheck && electron-vite build",
