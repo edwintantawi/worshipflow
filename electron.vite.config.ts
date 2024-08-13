@@ -15,6 +15,11 @@ export default defineConfig({
   preload: {
     root: resolve(__dirname, 'src'),
     plugins: [externalizeDepsPlugin()],
+    resolve: {
+      alias: {
+        '@resources': resolve('resources'),
+      },
+    },
     build: {
       rollupOptions: {
         input: {
@@ -28,7 +33,6 @@ export default defineConfig({
     root: resolve(__dirname, 'src'),
     resolve: {
       alias: {
-        '@resources': resolve('resources'),
         '@console': resolve('src/console/renderer'),
         '@projector': resolve('src/projector/renderer'),
       },
