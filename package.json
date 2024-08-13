@@ -1,5 +1,6 @@
 {
   "name": "worshipflow",
+  "productName": "Worshipflow",
   "version": "1.0.0",
   "description": "Worship presenter application",
   "main": "./out/main/index.js",
