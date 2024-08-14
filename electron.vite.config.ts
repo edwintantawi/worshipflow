@@ -1,48 +1,67 @@
-import { resolve } from 'path';
+import path from 'path';
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   main: {
     plugins: [externalizeDepsPlugin()],
+    build: {
+      rollupOptions: {
+        input: {
+          index: path.resolve(__dirname, 'src/apps/main/index.ts'),
+        },
+      },
+    },
     resolve: {
       alias: {
-        '@resources': resolve('resources'),
-        '@main': resolve(__dirname, 'src/main'),
+        '@resources': path.resolve(__dirname, 'resources'),
+        '@main': path.resolve(__dirname, 'src/apps/main'),
       },
     },
   },
   preload: {
-    root: resolve(__dirname, 'src'),
     plugins: [externalizeDepsPlugin()],
-    resolve: {
-      alias: {
-        '@resources': resolve('resources'),
-      },
-    },
     build: {
       rollupOptions: {
         input: {
-          console: resolve(__dirname, 'src/console/preload/index.ts'),
-          projector: resolve(__dirname, 'src/projector/preload/index.ts'),
+          console: path.resolve(__dirname, 'src/apps/console/preload/index.ts'),
+          projector: path.resolve(__dirname, 'src/apps/projector/preload/index.ts'),
         },
+      },
+    },
+    resolve: {
+      alias: {
+        '@resources': path.resolve(__dirname, 'resources'),
+        '@main': path.resolve(__dirname, 'src/apps/main'),
       },
     },
   },
   renderer: {
-    root: resolve(__dirname, 'src'),
+    plugins: [react()],
+    root: path.resolve(__dirname, 'src'),
     resolve: {
       alias: {
-        '@console': resolve('src/console/renderer'),
-        '@projector': resolve('src/projector/renderer'),
+        '~': path.resolve(__dirname, 'src/packages'),
+        '@console': path.resolve(__dirname, 'src/apps/console/renderer'),
+        '@projector': path.resolve(__dirname, 'src/apps/projector/renderer'),
       },
     },
-    plugins: [react()],
     build: {
+      minify: 'esbuild',
+      cssMinify: true,
       rollupOptions: {
         input: {
-          console: resolve(__dirname, 'src/console/renderer/index.html'),
-          projector: resolve(__dirname, 'src/projector/renderer/index.html'),
+          console: path.resolve(__dirname, 'src/apps/console/renderer/index.html'),
+          projector: path.resolve(__dirname, 'src/apps/projector/renderer/index.html'),
+        },
+        output: {
+          assetFileNames: (assetInfo) => {
+            const isStylesAsset = assetInfo.name?.endsWith('.css');
+            if (isStylesAsset) {
+              return 'assets/styles.[hash].css';
+            }
+            return 'assets/[name].[hash][extname]';
+          },
         },
       },
     },

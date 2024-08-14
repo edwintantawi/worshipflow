@@ -30,9 +30,9 @@ export function createConsoleWindow(): BrowserWindow {
   });
 
   if (is.dev && ELECTRON_RENDERER_URL) {
-    window.loadURL(`${ELECTRON_RENDERER_URL}/console/renderer/index.html`);
+    window.loadURL(`${ELECTRON_RENDERER_URL}/apps/console/renderer/index.html`);
   } else {
-    window.loadFile(path.join(RENDERER_PATH, '/console/renderer/index.html'));
+    window.loadFile(path.join(RENDERER_PATH, '/apps/console/renderer/index.html'));
   }
 
   return window;
@@ -54,9 +54,9 @@ export function createProjectorWindow({ display }: { display: Electron.Display }
   window.maximize();
 
   if (is.dev && ELECTRON_RENDERER_URL) {
-    window.loadURL(`${ELECTRON_RENDERER_URL}/projector/renderer/index.html`);
+    window.loadURL(`${ELECTRON_RENDERER_URL}/apps/projector/renderer/index.html`);
   } else {
-    window.loadFile(path.join(RENDERER_PATH, '/projector/renderer/index.html'));
+    window.loadFile(path.join(RENDERER_PATH, '/apps/projector/renderer/index.html'));
   }
 
   return window;
