@@ -2,15 +2,19 @@ import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { electronApp, optimizer } from '@electron-toolkit/utils';
 import { createConsoleWindow, createProjectorWindow } from '@main/window';
 import { getExternalDisplay } from '@main/utilities';
+import { ACTION_EVENT } from '~/actions';
 
-// Keep single instance of projector window
+// Keep single instance of window
 let projectorWindow: BrowserWindow | undefined;
+let consoleWindow: BrowserWindow | undefined;
 
 function createWindow(): void {
   const externalDisplay = getExternalDisplay();
 
-  // Create the main console window
-  createConsoleWindow();
+  // Create the main console window if not exists
+  if (!consoleWindow) {
+    consoleWindow = createConsoleWindow();
+  }
 
   // Create the projector window if an external display
   if (externalDisplay && !projectorWindow) {
@@ -34,6 +38,11 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'));
+  ipcMain.on(ACTION_EVENT, (_, args) => {
+    if (!projectorWindow) return;
+    // Forward action to projector window
+    projectorWindow.webContents.send(ACTION_EVENT, args);
+  });
 
   createWindow();
 

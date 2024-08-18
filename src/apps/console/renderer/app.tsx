@@ -4,7 +4,13 @@ import { Versions } from '~/components/versions';
 
 export function App() {
   const versions = window.electron.process.versions;
-  const ipcHandle = () => window.electron.ipcRenderer.send('ping');
+
+  function handleClickAction() {
+    window.action.send({
+      type: 'SET_TEXT',
+      payload: { content: '[ACTION][SET_TEXT] From Console to Projector' },
+    });
+  }
 
   return (
     <main className="h-screen grid place-items-center place-content-center gap-4 p-6">
@@ -16,7 +22,7 @@ export function App() {
             Documentation
           </a>
         </Button>
-        <Button onClick={ipcHandle}>Send IPC</Button>
+        <Button onClick={handleClickAction}>Send action to projector</Button>
       </div>
       <Versions
         process={{
