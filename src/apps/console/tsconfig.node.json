@@ -1,0 +1,13 @@
+{
+  "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
+  "include": ["../../packages/**/*", "preload/**/*.ts"],
+  "compilerOptions": {
+    "composite": true,
+    "types": ["electron-vite/node"],
+    "baseUrl": ".",
+    "paths": {
+      "@console/preload/*": ["./preload/*"],
+      "~/*": ["../../packages/*"]
+    }
+  }
+}

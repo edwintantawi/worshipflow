@@ -16,6 +16,7 @@ export default defineConfig({
       alias: {
         '@resources': path.resolve(__dirname, 'resources'),
         '@main': path.resolve(__dirname, 'src/apps/main'),
+        '~': path.resolve(__dirname, 'src/packages'),
       },
     },
   },
@@ -33,6 +34,9 @@ export default defineConfig({
       alias: {
         '@resources': path.resolve(__dirname, 'resources'),
         '@main': path.resolve(__dirname, 'src/apps/main'),
+        '@console': path.resolve(__dirname, 'src/apps/console'),
+        '@projector': path.resolve(__dirname, 'src/apps/projector'),
+        '~': path.resolve(__dirname, 'src/packages'),
       },
     },
   },
@@ -42,8 +46,8 @@ export default defineConfig({
     resolve: {
       alias: {
         '~': path.resolve(__dirname, 'src/packages'),
-        '@console': path.resolve(__dirname, 'src/apps/console/renderer'),
-        '@projector': path.resolve(__dirname, 'src/apps/projector/renderer'),
+        '@console': path.resolve(__dirname, 'src/apps/console'),
+        '@projector': path.resolve(__dirname, 'src/apps/projector'),
       },
     },
     build: {
