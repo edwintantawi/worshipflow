@@ -1,3 +1,4 @@
+import * as React from 'react';
 import electronLogo from '~/assets/electron.svg';
 import { Button } from '~/components/ui/button';
 import { Versions } from '~/components/versions';
@@ -5,6 +6,13 @@ import { Versions } from '~/components/versions';
 export function App() {
   const versions = window.electron.process.versions;
   const ipcHandle = () => window.electron.ipcRenderer.send('ping');
+  const [text, setText] = React.useState('');
+
+  React.useEffect(() => {
+    window.api.action.on('SET_TEXT', (payload) => {
+      setText(payload.content);
+    });
+  }, []);
 
   return (
     <main className="h-screen grid place-items-center place-content-center gap-4 p-6">
@@ -18,6 +26,7 @@ export function App() {
         </Button>
         <Button onClick={ipcHandle}>Send IPC</Button>
       </div>
+      <p className="text-center my-4">{text}</p>
       <Versions
         process={{
           chrome: versions.chrome,
