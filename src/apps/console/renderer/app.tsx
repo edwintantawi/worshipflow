@@ -6,7 +6,7 @@ export function App() {
   const versions = window.electron.process.versions;
 
   function handleClickAction() {
-    window.action.send({
+    window.api.action.send({
       type: 'SET_TEXT',
       payload: { content: '[ACTION][SET_TEXT] From Console to Projector' },
     });

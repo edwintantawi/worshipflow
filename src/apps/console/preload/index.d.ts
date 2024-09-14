@@ -1,10 +1,9 @@
 import { ElectronAPI } from '@electron-toolkit/preload';
-import { actionAPI } from '@console/preload/action';
+import { api } from '@console/preload/api';
 
 declare global {
   interface Window {
     electron: ElectronAPI;
-    api: unknown;
-    action: typeof actionAPI;
+    api: typeof api;
   }
 }

@@ -9,7 +9,7 @@ export function App() {
   const [text, setText] = React.useState('');
 
   React.useEffect(() => {
-    window.action.on('SET_TEXT', (payload) => {
+    window.api.action.on('SET_TEXT', (payload) => {
       setText(payload.content);
     });
   }, []);
